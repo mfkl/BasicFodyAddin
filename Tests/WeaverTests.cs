@@ -11,7 +11,7 @@ public class WeaverTests
     string newAssemblyPath;
     string assemblyPath;
 
-    [TestFixtureSetUp]
+    [OneTimeSetUp]
     public void Setup()
     {
         var projectPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\AssemblyToProcess\AssemblyToProcess.csproj"));
@@ -23,14 +23,16 @@ public class WeaverTests
         newAssemblyPath = assemblyPath.Replace(".dll", "2.dll");
         File.Copy(assemblyPath, newAssemblyPath, true);
 
-        var moduleDefinition = ModuleDefinition.ReadModule(newAssemblyPath);
-        var weavingTask = new ModuleWeaver
+        using (var moduleDefinition = ModuleDefinition.ReadModule(assemblyPath))
         {
-            ModuleDefinition = moduleDefinition
-        };
+            var weavingTask = new ModuleWeaver
+            {
+                ModuleDefinition = moduleDefinition
+            };
 
-        weavingTask.Execute();
-        moduleDefinition.Write(newAssemblyPath);
+            weavingTask.Execute();
+            moduleDefinition.Write(newAssemblyPath);
+        }
 
         assembly = Assembly.LoadFile(newAssemblyPath);
     }
