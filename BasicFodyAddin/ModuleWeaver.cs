@@ -36,7 +36,7 @@ public class ModuleWeaver
     void AddConstructor(TypeDefinition newType)
     {
         var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, typeSystem.Void);
-        var objectConstructor = ModuleDefinition.Import(typeSystem.Object.Resolve().GetConstructors().First());
+        var objectConstructor = ModuleDefinition.ImportReference(typeSystem.Object.Resolve().GetConstructors().First());
         var processor = method.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldarg_0);
         processor.Emit(OpCodes.Call, objectConstructor);
