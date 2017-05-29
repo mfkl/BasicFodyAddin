@@ -2,6 +2,8 @@
 
 This is a simple solution built as a starter for writing [Fody](https://github.com/Fody/Fody) addins.
 
+[![NuGet Status](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
+
 ## The moving parts
 
 ### BasicFodyAddin Project
