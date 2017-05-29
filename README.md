@@ -1,8 +1,8 @@
+[![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody)
+
 ![Icon](https://raw.github.com/Fody/BasicFodyAddin/master/Icons/package_icon.png)
 
 This is a simple solution built as a starter for writing [Fody](https://github.com/Fody/Fody) addins.
-
-[![NuGet Status](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
 
 ## The moving parts
 
@@ -56,21 +56,26 @@ Note that it does not reference AssemblyToProcess as this could cause assembly l
 
 The test assembly contains three parts.
 
+
 #### 1. WeaverHelper
 
 A helper class that takes the output of  AssemblyToProcess and uses ModuleWeaver to process it. It also create a copy of the target assembly suffixed with '2' so a side-by-side comparison of the before and after IL can be done using a decompiler.
+
 
 #### 2. Verifier
 
 A helper class that runs [peverfiy](http://msdn.microsoft.com/en-us/library/62bwd2yd.aspx) to validate the resultant assembly.
 
+
 #### 3. Tests
 
 The actual unit tests that use WeaverHelper and Verifier. It has one test to construct and execute the injected class.
 
+
 ### No reference to Fody
 
 Not that there is no reference to Fody nor are any Fody files included in the solution. Interaction with Fody is done by convention at compile time.
+
 
 ## Icon
 
