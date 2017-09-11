@@ -74,7 +74,7 @@ The actual unit tests that use WeaverHelper and Verifier. It has one test to con
 
 ### No reference to Fody
 
-Not that there is no reference to Fody nor are any Fody files included in the solution. Interaction with Fody is done by convention at compile time.
+Note that there is no reference to Fody nor are any Fody files included in the solution. Interaction with Fody is done by convention at compile time.
 
 
 ## Icon
