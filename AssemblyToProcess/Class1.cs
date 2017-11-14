@@ -1,5 +1,4 @@
-﻿
-namespace AssemblyToProcess
+﻿namespace AssemblyToProcess
 {
     class Class1
     {

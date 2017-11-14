@@ -11,11 +11,9 @@ public class WeaverTests
     string newAssemblyPath;
     string assemblyPath;
 
-    [OneTimeSetUp]
-    public void Setup()
+    public WeaverTests()
     {
-        var projectPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\AssemblyToProcess.csproj"));
-        assemblyPath = Path.Combine(Path.GetDirectoryName(projectPath), @"bin\Debug\AssemblyToProcess.dll");
+        assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "AssemblyToProcess.dll");
 #if (!DEBUG)
         assemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif
@@ -40,7 +38,7 @@ public class WeaverTests
     [Test]
     public void ValidateHelloWorldIsInjected()
     {
-        var type = assembly.GetType("Hello");
+        var type = assembly.GetType("TheNamespace.Hello");
         var instance = (dynamic)Activator.CreateInstance(type);
 
         Assert.AreEqual("Hello World", instance.World());

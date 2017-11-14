@@ -23,7 +23,8 @@ public class ModuleWeaver
     public void Execute()
     {
         typeSystem = ModuleDefinition.TypeSystem;
-        var newType = new TypeDefinition(null, "Hello", TypeAttributes.Public, typeSystem.Object);
+        var ns = GetNamespace();
+        var newType = new TypeDefinition(ns, "Hello", TypeAttributes.Public, typeSystem.Object);
 
         AddConstructor(newType);
 
@@ -31,6 +32,19 @@ public class ModuleWeaver
 
         ModuleDefinition.Types.Add(newType);
         LogInfo("Added type 'Hello' with method 'World'.");
+        CleanReferences();
+    }
+
+    string GetNamespace()
+    {
+        var attributes = ModuleDefinition.Assembly.CustomAttributes;
+        var namespaceAttribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "NamespaceAttribute");
+        if (namespaceAttribute == null)
+        {
+            return null;
+        }
+        attributes.Remove(namespaceAttribute);
+        return (string) namespaceAttribute.ConstructorArguments.First().Value;
     }
 
     void AddConstructor(TypeDefinition newType)
@@ -44,12 +58,25 @@ public class ModuleWeaver
         newType.Methods.Add(method);
     }
 
-    void AddHelloWorld( TypeDefinition newType)
+    void AddHelloWorld(TypeDefinition newType)
     {
         var method = new MethodDefinition("World", MethodAttributes.Public, typeSystem.String);
         var processor = method.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldstr, "Hello World");
         processor.Emit(OpCodes.Ret);
         newType.Methods.Add(method);
+    }
+
+    void CleanReferences()
+    {
+        var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "BasicFodyAddin");
+        if (referenceToRemove == null)
+        {
+            LogInfo("\tNo reference to 'BasicFodyAddin' found. References not modified.");
+            return;
+        }
+
+        ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
+        LogInfo("\tRemoving reference to 'BasicFodyAddin'.");
     }
 }

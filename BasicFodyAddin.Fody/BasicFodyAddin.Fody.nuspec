@@ -10,7 +10,7 @@
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/Fody/BasicFodyAddin</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://raw.github.com/Fody/BasicFodyAddin/master/Icons/package_icon.png</iconUrl>
+    <iconUrl>https://raw.github.com/Fody/BasicFodyAddin/master/package_icon.png</iconUrl>
     <description>A sample Fody add-in.</description>
     <summary />
     <language>en-AU</language>

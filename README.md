@@ -4,15 +4,24 @@
 
 This is a simple solution built as a starter for writing [Fody](https://github.com/Fody/Fody) addins.
 
+
 ## The moving parts
+
 
 ### BasicFodyAddin Project
 
-The project that does the weaving. 
+A project that contains any classes used for compile time metadata. Generally any usage and reference to this is removed at compile time so it is not needed as part of application deployment.
+
+
+### BasicFodyAddin.Fody Project
+
+The project that does the weaving.
+
 
 #### Output of the project
 
-It outputs a file named SampleFodyAddin.Fody. The '.Fody' suffix is necessary for it to be picked up by Fody.
+It outputs a file named BasicFodyAddin.Fody. The '.Fody' suffix is necessary for it to be picked up by Fody.
+
 
 #### ModuleWeaver
 
@@ -20,46 +29,51 @@ ModuleWeaver.cs is where the target assembly is modified. Fody will pick up this
 
 In this case a new type is being injected into the target assembly that looks like this.
 
-	public class Hello
-	{
-	    public string World()
-	    {
-	        return "Hello World";
-	    }
-	}
+```
+public class Hello
+{
+    public string World()
+    {
+        return "Hello World";
+    }
+}
+```
 
-See [ModuleWeaver](https://github.com/Fody/Fody/wiki/ModuleWeaver)
- for more details.
+See [ModuleWeaver](https://github.com/Fody/Fody/wiki/ModuleWeaver) for more details.
 
-### Nuget Project
 
-Fody addins are deployed as [nuget](http://nuget.org/) packages. NugetProject builds the package for SampleFodyAddin as part of a build. The output of this project is placed in *SolutionDir*/NuGetBuild. 
+#### Nuget construction
 
-This project uses  [pepita](https://github.com/SimonCropp/Pepita) to construct the package but you could also use nuget.exe.
+Fody addins are deployed as [NuGet](http://nuget.org/) packages. The BasicFodyAddin.Fody builds the package for BasicFodyAddin as part of a build. The output of this project is placed in *SolutionDir*/nugets.
 
-For more information on the nuget structure of Fody addins see [DeployingAddinsAsNugets](https://github.com/Fody/Fody/wiki/DeployingAddinsAsNugets)
+This project uses [pepita](https://github.com/SimonCropp/Pepita) to construct the package but you could also any other mechanism for constructing a NuGet package.
+
+For more information on the NuGet structure of Fody addins see [DeployingAddinsAsNugets](https://github.com/Fody/Fody/wiki/DeployingAddinsAsNugets)
 
 
 ### AssemblyToProcess Project
 
 A target assembly to process and then validate with unit tests.
 
-### Tests  Project
 
-This is where you would place your unit tests. 
+### Tests Project
+
+This is where you would place your unit tests.
 
 Note that it does not reference AssemblyToProcess as this could cause assembly loading issues. However we want to force AssemblyToProcess to be built prior to the Tests project. So in Tests.csproj there is a non-reference dependency to force the build order.
 
-    <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+```
+<ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
+  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+</ProjectReference>
+```
 
 The test assembly contains three parts.
 
 
 #### 1. WeaverHelper
 
-A helper class that takes the output of  AssemblyToProcess and uses ModuleWeaver to process it. It also create a copy of the target assembly suffixed with '2' so a side-by-side comparison of the before and after IL can be done using a decompiler.
+A helper class that takes the output of AssemblyToProcess and uses ModuleWeaver to process it. It also create a copy of the target assembly suffixed with '2' so a side-by-side comparison of the before and after IL can be done using a decompiler.
 
 
 #### 2. Verifier
