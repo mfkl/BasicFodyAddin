@@ -60,14 +60,6 @@ A target assembly to process and then validate with unit tests.
 
 This is where you would place your unit tests.
 
-Note that it does not reference AssemblyToProcess as this could cause assembly loading issues. However we want to force AssemblyToProcess to be built prior to the Tests project. So in Tests.csproj there is a non-reference dependency to force the build order.
-
-```
-<ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
-  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-</ProjectReference>
-```
-
 The test assembly contains three parts.
 
 
