@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 [assembly: AssemblyTitle("BasicFodyAddin")]
 [assembly: AssemblyProduct("BasicFodyAddin")]
-[assembly: AssemblyVersion("0.4.0")]
+[assembly: AssemblyVersion("1.0.0")]
