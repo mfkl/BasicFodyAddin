@@ -10,9 +10,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
-    <ProjectReference Include="..\BasicFodyAddin\BasicFodyAddin.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory">
     <ItemGroup>
