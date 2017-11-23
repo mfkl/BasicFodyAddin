@@ -1,8 +1,38 @@
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
+[![NuGet Status](http://img.shields.io/nuget/v/BasicFodyAddin.Fody.svg?style=flat)](https://www.nuget.org/packages/BasicFodyAddin.Fody/)
 
-![Icon](https://raw.github.com/Fody/BasicFodyAddin/master/Icons/package_icon.png)
+![Icon](https://raw.github.com/Fody/BasicFodyAddin/master/package_icon.png)
 
 This is a simple solution built as a starter for writing [Fody](https://github.com/Fody/Fody) addins.
+
+
+## Usage
+
+See also [Fody usage](https://github.com/Fody/Fody#usage).
+
+
+### NuGet installation
+
+Install the [BasicFodyAddin.Fody NuGet package](https://nuget.org/packages/BasicFodyAddin.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
+
+```
+PM> Install-Package BasicFodyAddin.Fody
+PM> Update-Package Fody
+```
+
+The `Update-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
+
+
+### Add to FodyWeavers.xml
+
+Add `<BasicFodyAddin/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweaversxml)
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<Weavers>
+  <BasicFodyAddin/>
+</Weavers>
+```
 
 
 ## The moving parts
