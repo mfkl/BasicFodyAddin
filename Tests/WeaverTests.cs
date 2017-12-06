@@ -40,10 +40,11 @@ public class WeaverTests
 
         Assert.AreEqual("Hello World", instance.World());
     }
-
+#if(NET452)
     [Test]
     public void PeVerify()
     {
-        Verifier.Verify(assemblyPath,newAssemblyPath);
+        Verifier.Verify(assemblyPath, newAssemblyPath);
     }
+#endif
 }
