@@ -2,11 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard1.4</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <Authors>Simon Cropp</Authors>
+    <PackageProjectUrl>http://github.com/Fody/BasicFodyAddin</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs" />
+    <PackageReference Include="FodyPackaging" Version="2.3.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>

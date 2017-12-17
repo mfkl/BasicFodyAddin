@@ -1,26 +1,15 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 using Mono.Cecil.Cil;
+using Fody;
 
-public class ModuleWeaver
+public class ModuleWeaver: BaseModuleWeaver
 {
-    // Will log an informational message to MSBuild
-    public Action<string> LogInfo { get; set; }
-
-    // An instance of Mono.Cecil.ModuleDefinition for processing
-    public ModuleDefinition ModuleDefinition { get; set; }
-
     TypeSystem typeSystem;
 
-    // Init logging delegates to make testing easier
-    public ModuleWeaver()
-    {
-        LogInfo = m => { };
-    }
-
-    public void Execute()
+    public override void Execute()
     {
         typeSystem = ModuleDefinition.TypeSystem;
         var ns = GetNamespace();
@@ -33,6 +22,11 @@ public class ModuleWeaver
         ModuleDefinition.Types.Add(newType);
         LogInfo("Added type 'Hello' with method 'World'.");
         CleanReferences();
+    }
+
+    public override IEnumerable<string> GetAssembliesForScanning()
+    {
+        return Enumerable.Empty<string>();
     }
 
     string GetNamespace()

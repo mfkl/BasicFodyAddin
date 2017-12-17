@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Fody;
 using Mono.Cecil;
-using NUnit.Framework;
+using Xunit;
+#pragma warning disable 618
 
-[TestFixture]
-public class WeaverTests
+public class WeaverTests:IDisposable
 {
     Assembly assembly;
     string newAssemblyPath;
@@ -13,7 +14,7 @@ public class WeaverTests
 
     public WeaverTests()
     {
-        assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "AssemblyToProcess.dll");
+        assemblyPath = Path.Combine(CodeBaseLocation.CurrentDirectory, "AssemblyToProcess.dll");
 
         newAssemblyPath = assemblyPath.Replace(".dll", "2.dll");
         File.Copy(assemblyPath, newAssemblyPath, true);
@@ -29,22 +30,26 @@ public class WeaverTests
             moduleDefinition.Write(newAssemblyPath);
         }
 
-        assembly = Assembly.LoadFile(newAssemblyPath);
+        assembly = Assembly.Load(File.ReadAllBytes(newAssemblyPath));
     }
 
-    [Test]
+    [Fact]
     public void ValidateHelloWorldIsInjected()
     {
         var type = assembly.GetType("TheNamespace.Hello");
         var instance = (dynamic)Activator.CreateInstance(type);
 
-        Assert.AreEqual("Hello World", instance.World());
+        Assert.Equal("Hello World", instance.World());
     }
-#if(NET452)
-    [Test]
+
+    [Fact]
     public void PeVerify()
     {
-        Verifier.Verify(assemblyPath, newAssemblyPath);
+        PeVerifier.ThrowIfDifferent(assemblyPath, newAssemblyPath);
     }
-#endif
+
+    public void Dispose()
+    {
+       File.Delete(newAssemblyPath);
+    }
 }
