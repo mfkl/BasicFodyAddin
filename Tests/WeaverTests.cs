@@ -45,7 +45,7 @@ public class WeaverTests:IDisposable
     [Fact]
     public void PeVerify()
     {
-        PeVerifier.ThrowIfDifferent(assemblyPath, newAssemblyPath);
+        PeVerifier.ThrowIfDifferent(assemblyPath, newAssemblyPath, new []{ "0x80070002" });
     }
 
     public void Dispose()
