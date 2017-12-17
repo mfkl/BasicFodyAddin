@@ -10,9 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{E97E649F-B703-47E3-B18A-0871D3498742}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicFodyAddin", "BasicFodyAddin\BasicFodyAddin.csproj", "{9BCD4937-CB40-4AE1-B884-16F37D64B3C7}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C3578A7B-09A6-4444-9383-0DEAFA4958BD} = {C3578A7B-09A6-4444-9383-0DEAFA4958BD}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C65B13FA-E7BB-421E-848A-CD02D730643E}"
 	ProjectSection(SolutionItems) = preProject
