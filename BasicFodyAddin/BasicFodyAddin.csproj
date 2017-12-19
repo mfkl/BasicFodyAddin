@@ -8,6 +8,7 @@
     <PackageProjectUrl>http://github.com/Fody/BasicFodyAddin</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyPackaging" Version="2.3.0" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="2.3.2" />
+    <PackageReference Include="FodyPackaging" Version="2.3.2" PrivateAssets="All" />
   </ItemGroup>
 </Project>
