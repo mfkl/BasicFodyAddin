@@ -21,7 +21,6 @@ public class ModuleWeaver: BaseModuleWeaver
 
         ModuleDefinition.Types.Add(newType);
         LogInfo("Added type 'Hello' with method 'World'.");
-        CleanReferences();
     }
 
     public override IEnumerable<string> GetAssembliesForScanning()
@@ -61,16 +60,5 @@ public class ModuleWeaver: BaseModuleWeaver
         newType.Methods.Add(method);
     }
 
-    void CleanReferences()
-    {
-        var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "BasicFodyAddin");
-        if (referenceToRemove == null)
-        {
-            LogInfo("\tNo reference to 'BasicFodyAddin' found. References not modified.");
-            return;
-        }
-
-        ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
-        LogInfo("\tRemoving reference to 'BasicFodyAddin'.");
-    }
+    public override bool ShouldCleanReference => true;
 }
