@@ -7,13 +7,11 @@ using Fody;
 
 public class ModuleWeaver: BaseModuleWeaver
 {
-    TypeSystem typeSystem;
-
     public override void Execute()
     {
-        typeSystem = ModuleDefinition.TypeSystem;
         var ns = GetNamespace();
-        var newType = new TypeDefinition(ns, "Hello", TypeAttributes.Public, typeSystem.Object);
+        var objectRef = ModuleDefinition.ImportReference(FindType("System.Object"));
+        var newType = new TypeDefinition(ns, "Hello", TypeAttributes.Public, objectRef);
 
         AddConstructor(newType);
 
@@ -25,7 +23,8 @@ public class ModuleWeaver: BaseModuleWeaver
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
-        return Enumerable.Empty<string>();
+        yield return "netstandard";
+        yield return "mscorlib";
     }
 
     string GetNamespace()
@@ -42,8 +41,9 @@ public class ModuleWeaver: BaseModuleWeaver
 
     void AddConstructor(TypeDefinition newType)
     {
-        var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, typeSystem.Void);
-        var objectConstructor = ModuleDefinition.ImportReference(typeSystem.Object.Resolve().GetConstructors().First());
+        var voidRef = ModuleDefinition.ImportReference(FindType("System.Void"));
+        var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, voidRef);
+        var objectConstructor = ModuleDefinition.ImportReference(FindType("System.Object").GetConstructors().First());
         var processor = method.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldarg_0);
         processor.Emit(OpCodes.Call, objectConstructor);
@@ -53,7 +53,8 @@ public class ModuleWeaver: BaseModuleWeaver
 
     void AddHelloWorld(TypeDefinition newType)
     {
-        var method = new MethodDefinition("World", MethodAttributes.Public, typeSystem.String);
+        var stringRef = ModuleDefinition.ImportReference(FindType("System.String"));
+        var method = new MethodDefinition("World", MethodAttributes.Public, stringRef);
         var processor = method.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldstr, "Hello World");
         processor.Emit(OpCodes.Ret);
