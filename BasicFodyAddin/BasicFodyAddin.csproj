@@ -5,10 +5,10 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <Authors>Simon Cropp</Authors>
-    <PackageProjectUrl>http://github.com/Fody/BasicFodyAddin</PackageProjectUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Fody" Version="2.3.14" />
-    <PackageReference Include="FodyPackaging" Version="2.3.14" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="2.3.18" PrivateAssets="None" />
+    <PackageReference Include="FodyPackaging" Version="2.3.18" PrivateAssets="All" />
   </ItemGroup>
 </Project>

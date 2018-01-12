@@ -5,9 +5,9 @@ using Xunit;
 
 public class WeaverTests
 {
-    TestResult testResult;
+    static TestResult testResult;
 
-    public WeaverTests()
+    static WeaverTests()
     {
         var weavingTask = new ModuleWeaver();
         testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
