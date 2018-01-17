@@ -76,8 +76,6 @@ See [ModuleWeaver](https://github.com/Fody/Fody/wiki/ModuleWeaver) for more deta
 
 Fody addins are deployed as [NuGet](http://nuget.org/) packages. The BasicFodyAddin.Fody builds the package for BasicFodyAddin as part of a build. The output of this project is placed in *SolutionDir*/nugets.
 
-This project uses [pepita](https://github.com/SimonCropp/Pepita) to construct the package but you could also any other mechanism for constructing a NuGet package.
-
 For more information on the NuGet structure of Fody addins see [DeployingAddinsAsNugets](https://github.com/Fody/Fody/wiki/DeployingAddinsAsNugets)
 
 
@@ -91,21 +89,6 @@ A target assembly to process and then validate with unit tests.
 This is where you would place your unit tests.
 
 The test assembly contains three parts.
-
-
-#### 1. WeaverHelper
-
-A helper class that takes the output of AssemblyToProcess and uses ModuleWeaver to process it. It also create a copy of the target assembly suffixed with '2' so a side-by-side comparison of the before and after IL can be done using a decompiler.
-
-
-#### 2. Verifier
-
-A helper class that runs [peverfiy](http://msdn.microsoft.com/en-us/library/62bwd2yd.aspx) to validate the resultant assembly.
-
-
-#### 3. Tests
-
-The actual unit tests that use WeaverHelper and Verifier. It has one test to construct and execute the injected class.
 
 
 ### No reference to Fody
