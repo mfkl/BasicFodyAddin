@@ -10,8 +10,7 @@ public class ModuleWeaver: BaseModuleWeaver
     public override void Execute()
     {
         var ns = GetNamespace();
-        var objectRef = ModuleDefinition.ImportReference(FindType("System.Object"));
-        var newType = new TypeDefinition(ns, "Hello", TypeAttributes.Public, objectRef);
+        var newType = new TypeDefinition(ns, "Hello", TypeAttributes.Public, TypeSystem.ObjectReference);
 
         AddConstructor(newType);
 
@@ -41,9 +40,8 @@ public class ModuleWeaver: BaseModuleWeaver
 
     void AddConstructor(TypeDefinition newType)
     {
-        var voidRef = ModuleDefinition.ImportReference(FindType("System.Void"));
-        var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, voidRef);
-        var objectConstructor = ModuleDefinition.ImportReference(FindType("System.Object").GetConstructors().First());
+        var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, TypeSystem.VoidReference);
+        var objectConstructor = ModuleDefinition.ImportReference(TypeSystem.ObjectDefinition.GetConstructors().First());
         var processor = method.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldarg_0);
         processor.Emit(OpCodes.Call, objectConstructor);
@@ -53,8 +51,7 @@ public class ModuleWeaver: BaseModuleWeaver
 
     void AddHelloWorld(TypeDefinition newType)
     {
-        var stringRef = ModuleDefinition.ImportReference(FindType("System.String"));
-        var method = new MethodDefinition("World", MethodAttributes.Public, stringRef);
+        var method = new MethodDefinition("World", MethodAttributes.Public, TypeSystem.StringReference);
         var processor = method.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldstr, "Hello World");
         processor.Emit(OpCodes.Ret);
