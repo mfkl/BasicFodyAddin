@@ -9,53 +9,53 @@ public class ModuleWeaver: BaseModuleWeaver
 {
     public override void Execute()
     {
-        var ns = GetNamespace();
-        var newType = new TypeDefinition(ns, "Hello", TypeAttributes.Public, TypeSystem.ObjectReference);
+        foreach (var type in ModuleDefinition.Types)
+        {
+            foreach (var f in type.Fields.Where(IsEventHandler))
+            {
+                System.Diagnostics.Debug.WriteLine(f.FullName + " is now `static`");
+                f.IsStatic = true;
+            }
 
-        AddConstructor(newType);
+            foreach (var m in type.Methods.Where(NeedStaticKeyword))
+            {
+                System.Diagnostics.Debug.WriteLine(m.FullName + " is now `static`");
+                m.IsStatic = true;
+            }
 
-        AddHelloWorld(newType);
+            //TODO: replace `this` to null in IL
+        }
+    }
 
-        ModuleDefinition.Types.Add(newType);
-        LogInfo("Added type 'Hello' with method 'World'.");
+    TypeDefinition PInvokeAttribute => ModuleDefinition.Types.First(t => t.Name.Equals("MonoPInvokeCallbackAttribute"));
+    TypeDefinition AOTAttribute => ModuleDefinition.Types.First(t => t.Name.Equals("AOT"));
+
+    bool NeedStaticKeyword(MethodDefinition methodDefinition)
+    {
+        return HasPInvokeAttribute(methodDefinition) || HasAOTAttribute(methodDefinition);
+    }
+
+    bool HasPInvokeAttribute(MethodDefinition methodDefinition)
+    {
+        return methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name.Equals(PInvokeAttribute.Name));
+    }
+
+    bool HasAOTAttribute(MethodDefinition methodDefinition)
+    {
+        return methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name.Equals(AOTAttribute.Name));
+    }
+
+    bool IsEventHandler(FieldDefinition fieldDefinition)
+    {
+        var type = fieldDefinition.FieldType.GetElementType();
+
+        return type.FullName.Equals("System.EventHandler`1");
     }
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
         yield return "netstandard";
         yield return "mscorlib";
-    }
-
-    string GetNamespace()
-    {
-        var attributes = ModuleDefinition.Assembly.CustomAttributes;
-        var namespaceAttribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "NamespaceAttribute");
-        if (namespaceAttribute == null)
-        {
-            return null;
-        }
-        attributes.Remove(namespaceAttribute);
-        return (string) namespaceAttribute.ConstructorArguments.First().Value;
-    }
-
-    void AddConstructor(TypeDefinition newType)
-    {
-        var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, TypeSystem.VoidReference);
-        var objectConstructor = ModuleDefinition.ImportReference(TypeSystem.ObjectDefinition.GetConstructors().First());
-        var processor = method.Body.GetILProcessor();
-        processor.Emit(OpCodes.Ldarg_0);
-        processor.Emit(OpCodes.Call, objectConstructor);
-        processor.Emit(OpCodes.Ret);
-        newType.Methods.Add(method);
-    }
-
-    void AddHelloWorld(TypeDefinition newType)
-    {
-        var method = new MethodDefinition("World", MethodAttributes.Public, TypeSystem.StringReference);
-        var processor = method.Body.GetILProcessor();
-        processor.Emit(OpCodes.Ldstr, "Hello World");
-        processor.Emit(OpCodes.Ret);
-        newType.Methods.Add(method);
     }
 
     public override bool ShouldCleanReference => true;
